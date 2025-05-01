@@ -23,10 +23,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.util.List;
 
 public class LocationService extends Service implements LocationListener {
-    public final static String ACTION_DATA_READY = "com.landingsite.LCOAL_BORADCAST";
-    private static final String CHANNEL_ID = "CH2";
-    private static final String CHANNEL_NAME = "Data";
+    public final static String ACTION_DATA_READY = "com.landingsite.LOCAL_BROADCAST";
+
     private static final String TAG = LocationService.class.getSimpleName();
+    private static final String CHANNEL_ID = "CHANNEL_ID";
+    private static final String CHANNEL_NAME = "CHANNEL_NAME";
+
     private LocationManager locationManager;
 
 
@@ -34,9 +36,7 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "____ LocationService.onCreate");
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
-
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.createNotificationChannel(channel);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -68,12 +68,11 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "____ LocationService.onStartCommand");
         try {
             Log.d(TAG, "Requesting LocationUpdates");
             locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 3000L, 0.1F, this);
         } catch (SecurityException e) {
-            Log.e(TAG, "____ No permission: " + e.getMessage());
+            Log.w(TAG, e);
         }
         return START_STICKY;
     }
@@ -86,11 +85,9 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
-        Log.i(TAG, "onLocationChanged");
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        Log.d(TAG, "---------------> Latitude: " + latitude + ", Longitude: " + longitude + " <----------------");
+        Log.d(TAG, "---> (Latitude: " + latitude + ", Longitude: " + longitude + ") <---");
 
         Intent intent = new Intent(ACTION_DATA_READY);
         intent.putExtra("latitude", latitude);

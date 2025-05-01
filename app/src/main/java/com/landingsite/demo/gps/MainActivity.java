@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "granted");
             startService();
         }
-
     }
 
     @Override
@@ -47,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         theText = findViewById(R.id.text);
-
-        if (allGranted(PERMISSIONS_LOCATION)) {
+        if (allGranted()) {
             startService();
         } else {
             requestPermissions(PERMISSIONS_LOCATION, REQUEST_CODE_LOCATION);
@@ -56,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    boolean allGranted(String[] permissions) {
-        for (String permission : permissions) {
+    boolean allGranted() {
+        for (String permission : MainActivity.PERMISSIONS_LOCATION) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }

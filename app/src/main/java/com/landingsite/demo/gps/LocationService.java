@@ -53,17 +53,14 @@ public class LocationService extends Service implements LocationListener {
             Log.w(TAG, "NO PERMISSION: " + Manifest.permission.ACCESS_COARSE_LOCATION);
         } else {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            Log.i(TAG, "____ LocationManager:" + locationManager);
-
+            Log.i(TAG, "LocationManager:" + locationManager);
             if (locationManager != null) {
                 List<String> providers = locationManager.getProviders(true);
                 for (String provider : providers) {
-                    Log.d(TAG, "____ provider: " + provider);
+                    Log.d(TAG, "provider: " + provider);
                 }
             }
         }
-
-
     }
 
     @Override
@@ -88,12 +85,10 @@ public class LocationService extends Service implements LocationListener {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         Log.d(TAG, "---> (Latitude: " + latitude + ", Longitude: " + longitude + ") <---");
-
         Intent intent = new Intent(ACTION_DATA_READY);
         intent.putExtra("latitude", latitude);
         intent.putExtra("longitude", longitude);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
     }
 
 }
